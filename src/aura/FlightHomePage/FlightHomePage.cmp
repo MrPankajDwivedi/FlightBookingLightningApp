@@ -15,6 +15,8 @@
         </lightning:layoutItem>
     </lightning:layout>
     <!-- / PAGE HEADER -->
+     <div style="height:20px">
+    </div>
     <!--Booking Page-->
     <div aura:id="BookingDiv">
         <c:Home aura:id="Booking"/>
@@ -31,5 +33,21 @@
         <c:PaymentPage aura:id="Payment"/>
     </div>
     <!--/ Payment Page-->
-    
+    <!-- FOOTER -->
+    <div style="height:20px">
+    </div>
+    <footer role="contentinfo" >
+        <!-- LAYOUT GRID -->
+        <lightning:layout class="slds-page-header slds-page-header--object-home">
+            <lightning:layoutItem padding="around-small" >
+                <div>
+                   	<h1>Capstone Project</h1>
+                    <p class="slds-col">&copy; Pankaj Dwivedi(653582)</p>
+                </div>
+            </lightning:layoutItem>
+        </lightning:layout>
+        
+        <!-- / LAYOUT GRID -->
+    </footer>
+    <!-- / FOOTER -->
 </aura:component>

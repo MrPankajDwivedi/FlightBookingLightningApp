@@ -1,4 +1,4 @@
-<aura:component >
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes" controller="FlightBooking" >
   <aura:registerEvent name="bubblingEvent" type="c:processNextEvent"/>
      <aura:handler event="c:aeEvent" action="{!c.handleApplicationEvent}"/>
     <!-- Attributes -->
@@ -18,12 +18,13 @@
                               
                               }"/>
       <aura:attribute name="passengers" type="CustomerDetail__c[]" />
+   
  
     <!--/ Attributes -->
-    
+   
      <!-- Flight Details -->
     <lightning:layout >
-        <lightning:layoutItem size="12" padding="around-small">
+        <lightning:layoutItem size="12" class="slds-border_right slds-border_left">
             <table class="slds-table slds-table--bordered slds-table--striped" >
                 <th>
                     <h1 class="slds-text-heading--label">Flight Details</h1>
@@ -45,19 +46,19 @@
     
     <!-- Passenger List-->
        <lightning:layout >
-    <lightning:layoutItem size="12" padding="around-small"  >
+    <lightning:layoutItem size="12" class="slds-border_right slds-border_left" >
            <div id="PassengerDeatils">
        
         <table class="slds-table slds-table--bordered slds-table--striped" >
              <th>
                         <h1 class="slds-text-heading--label">Passenger Details</h1>
                     </th>
-            <tr  class="slds-text-heading--small slds-p-vertical--medium" Style="color:blue;backgroud-color:green">
+            <tr  class="slds-text-heading--small slds-p-vertical--medium" Style="color:white;background-color:#4286f4">
                	<th>Serial No.</th>
                 <th>Customer Name</th>
                 <Th>Age</Th>
-                <tH>Mobile Number</tH>
-                <th></th>
+                <tH>Gender</tH>
+              
             </tr>
             
             <tbody>
@@ -66,12 +67,22 @@
                          <td>{!index+1}</td>
                         <td>{!p.Name__c}</td>
                         <td>{!p.Age__c}</td>
-                        <td>{!p.Mobile_No__c}</td>
-                       
+                        <td>{!p.Gender__c}</td>
                     </tr> 
                 </aura:iteration>             
                    
-                
+                <tr>
+                    <td>
+                    </td>
+                    <td>
+                    </td>
+                    <td>
+                        Total Fare:
+                    </td>
+                    <td>
+                        Rs. 7850/-
+                    </td>
+                </tr>
             </tbody>
             
             
@@ -84,10 +95,12 @@
   
     <!-- / Pasenger List-->
     
-    <lightning:button label="Confirm and Pay"/>
-    <lightning:layout >
-        <lightning:layoutItem >
-            
+   <div class="slds-align_absolute-center">
+       <lightning:layout >
+        <lightning:layoutItem padding="around-small" >
+             <lightning:button label="Confirm and Receive Payment" variant="brand"  class="slds-button" onclick="{!c.bookFlightClient}"/>
         </lightning:layoutItem>
     </lightning:layout>
+    </div>
+    
 </aura:component>

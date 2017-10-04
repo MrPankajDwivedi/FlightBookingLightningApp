@@ -9,10 +9,11 @@
                              Journey_Date__c:'2017-01-01'}" />
     <aura:attribute name="Flights" type="FlightDetail__c[]" />
 
-    <div>
+    <div >
+    
 
-        <lightning:layout>
-            <lightning:layoutItem padding="around-small" size="12" class="slds-grid--align-center">
+        <lightning:layout >
+            <lightning:layoutItem size="12" class="slds-grid--align-center">
 
                 <!-- CREATE NEW EXPENSE -->
                 <div aria-labelledby="newbookingform">
@@ -22,7 +23,7 @@
 
                         <legend id="newbookingform" class="slds-text-heading--small 
                                                        slds-p-vertical--medium">
-                            New booking  App
+                            New booking
                         </legend>
 
                         <!-- CREATE NEW EXPENSE FORM -->
@@ -57,9 +58,9 @@
 
 
         </lightning:layout>
-        <lightning:layout>
-            <lightning:layoutItem size="12">
-                <div id="searchDeatils">
+        <lightning:layout >
+            <lightning:layoutItem size="12" class="slds-border_right slds-border_left">
+                <div id="searchDeatils" >
 
                     <table class="slds-table slds-table--bordered slds-table--striped">
 

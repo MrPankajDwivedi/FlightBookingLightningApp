@@ -15,7 +15,14 @@
     <aura:attribute name="passenger_index_for_edit" type="integer" default="1"/>
      <aura:attribute name="passenger" type="CustomerDetail__c" 
                      default="{ 'sobjectType': 'CustomerDetail__c', 
-                              	'Email__c':'lpu.pkd@gmail.com'
+                              	'Email__c':'lpu.pkd@gmail.com',
+                              'Gender__c':'Male'
+                              }"/>
+     <aura:attribute name="co_passenger" type="CustomerDetail__c" 
+                     default="{ 'sobjectType': 'CustomerDetail__c', 
+                              	'Name__c':'Rahul',
+                              'Age__c':'42',
+                              'Gender__c':'Male'
                               }"/>
       <aura:attribute name="passengers" type="CustomerDetail__c[]" />
  
@@ -23,7 +30,7 @@
     
 	 <!-- Flight Details -->
     <lightning:layout >
-        <lightning:layoutItem size="12" >
+        <lightning:layoutItem size="12"  class="slds-border_right slds-border_left">
             <table class="slds-table slds-table--bordered slds-table--striped" >
                 <th>
                     <h1 class="slds-text-heading--label">Flight Details</h1>
@@ -43,10 +50,10 @@
     </lightning:layout>
     <!-- / Flight Details -->
     <lightning:layout >
-    <lightning:layoutItem size="12"  >
+    <lightning:layoutItem size="12" class="slds-border_right slds-border_left slds-border_bottom" >
            <div id="PassengerDeatils">
        
-        <table class="slds-table slds-table--bordered slds-table--striped" >
+        <table class="slds-table" >
           
              <th>
                         <h1 class="slds-text-heading--label">Passenger Details</h1>
@@ -62,12 +69,17 @@
             <tbody>
                 <aura:iteration var="p" items="{!v.passengers}" indexVar="index">
                      <tr>
-                         <td >{!index+1}</td>
-                        <td>{!p.Name__c}</td>
-                        <td>{!p.Age__c}</td>
-                        <td>{!p.Mobile_No__c}</td>
+                         <td ><br />{!index+1}</td>
+                        <td><lightning:input name="name" type="string" value="{!p.Name__c}"   disabled="true"/></td>
+                        <td><lightning:input name="age" type="integer" value="{!p.Age__c}"  disabled="true"  /></td>
+                        <td> <lightning:select name="selectGender" value="{!p.Gender__c}"   disabled="true"  >
+                            <option value="--Select--">--Gender--</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            </lightning:select>
+                        </td>
                        
-                         <td  ><lightning:button label="Edit"
+                         <td  ><br /><lightning:button label="Edit"
                                                value="{!index}"  
                                                onclick="{!c.goToEdit }" /></td>
                     </tr> 
@@ -85,7 +97,7 @@
     </lightning:layout>
     
      <!-- Passenger Details -->
-   <div id="Passenger1">
+   <div id="Passenger1"> <!--Div id should be only id to get it by documnet.getElementByID-->
         <lightning:layout >
             <lightning:layoutItem size="12" >
                  
@@ -106,10 +118,10 @@
                         <td><lightning:input label="Date of Birth:" name="DOB" type="date" value="{!v.passenger.DOB__c}"   required="true" /></td>
                     </tr> 
                     <tr>
-                          <td> <lightning:select name="selectGender" label="Gender"   required="true">
-                            <option value="">--Gender--</option>
-                            <option value="1">Male</option>
-                            <option value="2">Female</option>
+                          <td> <lightning:select name="selectGender" label="Gender" value="{!v.passenger.Gender__c}" aura:id="gender__ddl" required="true">
+                            <option value="--Select--">--Gender--</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
                             </lightning:select>
                         </td>
                         <td><lightning:input label="Mobile No" name="Phone" type="phone" value="{!v.passenger.Mobile_No__c}"   required="true"/></td>
@@ -131,7 +143,7 @@
         </lightning:layout>
     </div>
     
-    <div aura:id="AdditionalPassenger">
+    <div id="Co_Passenger">
      <lightning:layout >
             <lightning:layoutItem size="12" >
                  <fieldset class="slds-box">
@@ -142,19 +154,19 @@
                 <table class="slds-table" >
                    
                     <tr>
-                        <td><lightning:input label="Name:" name="name" type="string" value="{!v.passenger.Name__c}"   required="true"/></td>
-                        <td><lightning:input label="Age:" name="age" type="intenger" value="{!v.passenger.Age__c}"   required="true"/></td>
-                        <td> <lightning:select name="selectGender" label="Gender"   required="true" >
-                            <option value="">--Gender--</option>
-                            <option value="1">Male</option>
-                            <option value="2">Female</option>
+                        <td><lightning:input label="Name:" name="name" type="string" value="{!v.co_passenger.Name__c}"   required="true"/></td>
+                        <td><lightning:input label="Age:" name="age" type="intenger" value="{!v.co_passenger.Age__c}"   required="true"/></td>
+                        <td> <lightning:select name="selectGender" label="Gender" value="{!v.co_passenger.Gender__c}"   required="true" >
+                            <option value="--Select--">--Gender--</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
                             </lightning:select>
                         </td>
                     </tr> 
                     
                     <tr>
                         <td>
-                               <td><lightning:button label="Add" name="AddPassenger"  onclick="{!c.AddPassenger}"/></td>
+                               <td><lightning:button label="Add" name="AddPassenger"  onclick="{!c.Add_Co_Passenger}"/></td>
                         </td>
                     </tr>
                 </table>
@@ -163,8 +175,13 @@
         </lightning:layout>
     </div> 
     <!-- / Passenger Details -->
-    <div style="padding-right:40%;padding-left:45%;padding-top:10px;padding-bottom:10px">
-         <lightning:button label="Book" class="slds" onclick="{!c.goToPayment}" />
+    <div class="slds-align_absolute-center" >
+        <lightning:layout >
+            <lightning:layoutItem padding="around-small">
+             <lightning:button label="Book" variant="brand"  class="slds-button"  onclick="{!c.goToPayment}" />
+            </lightning:layoutItem>
+        </lightning:layout>
+        
     </div>
    
 </aura:component>
