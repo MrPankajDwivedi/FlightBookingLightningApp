@@ -1,0 +1,170 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes" controller="FlightBooking">
+    <aura:registerEvent name="bubblingEvent" type="c:processNextEvent"/>
+     <aura:handler event="c:aeEvent" action="{!c.handleApplicationEvent}"/>
+    <!-- Attributes -->
+     <aura:attribute name="flight" type="FlightDetail__c" 
+                    default="{ 'sobjectType': 'FlightDetail__c',
+                             Name:'3505', 
+                             from__c:'Lucknow', 
+                             to__c:'Bangalore', 
+                             Journey_Date__c:'9/9/2017',
+                             Departure__c:'12:30',
+                             Arrival__c:'02:30',
+                             Duration__c:'02:00'}"/>
+    <aura:attribute name="number_of_passenger" type="integer" default="0" />
+    <aura:attribute name="passenger_index_for_edit" type="integer" default="1"/>
+     <aura:attribute name="passenger" type="CustomerDetail__c" 
+                     default="{ 'sobjectType': 'CustomerDetail__c', 
+                              	'Email__c':'lpu.pkd@gmail.com'
+                              }"/>
+      <aura:attribute name="passengers" type="CustomerDetail__c[]" />
+ 
+    <!--/ Attributes -->
+    
+	 <!-- Flight Details -->
+    <lightning:layout >
+        <lightning:layoutItem size="12" >
+            <table class="slds-table slds-table--bordered slds-table--striped" >
+                <th>
+                    <h1 class="slds-text-heading--label">Flight Details</h1>
+                </th>
+               
+                <tr>
+                    <td>Flight: {!v.flight.Name}<br />
+                        From: {!v.flight.from__c}<br />
+                        Departure: {!v.flight.Departure__c}</td>
+                    <td>Journey Date: {!v.flight.Journey_Date__c}<br />
+                         To: {!v.flight.to__c}<br />
+                         Arrival: {!v.flight.Arrival__c}</td>
+                     <td><br />Travel Time: {!v.flight.Duration__c}</td>
+                </tr> 
+            </table>
+        </lightning:layoutItem>
+    </lightning:layout>
+    <!-- / Flight Details -->
+    <lightning:layout >
+    <lightning:layoutItem size="12"  >
+           <div id="PassengerDeatils">
+       
+        <table class="slds-table slds-table--bordered slds-table--striped" >
+          
+             <th>
+                        <h1 class="slds-text-heading--label">Passenger Details</h1>
+                    </th>
+            <tr  class="slds-text-heading--small slds-p-vertical--medium" Style="color:white;background-color:#4286f4">
+               	<th style="width:10%">Serial No.</th>
+                <th style="width:40%">Passenger Name</th>
+                <Th style="width:10%">Age</Th>
+                <tH  style="width:20%">Gender</tH>
+                <th style="width:20%"></th>
+            </tr>
+            
+            <tbody>
+                <aura:iteration var="p" items="{!v.passengers}" indexVar="index">
+                     <tr>
+                         <td >{!index+1}</td>
+                        <td>{!p.Name__c}</td>
+                        <td>{!p.Age__c}</td>
+                        <td>{!p.Mobile_No__c}</td>
+                       
+                         <td  ><lightning:button label="Edit"
+                                               value="{!index}"  
+                                               onclick="{!c.goToEdit }" /></td>
+                    </tr> 
+                </aura:iteration>             
+                   
+                
+            </tbody>
+            
+            
+        </table>
+        
+  
+    </div>
+        </lightning:layoutItem>
+    </lightning:layout>
+    
+     <!-- Passenger Details -->
+   <div id="Passenger1">
+        <lightning:layout >
+            <lightning:layoutItem size="12" >
+                 
+                <!-- BOXED AREA -->
+                <fieldset class="slds-box">
+                  <legend id="newbookingform" class="slds-text-heading--small 
+                                                       slds-p-vertical--medium">
+                       <h1 class="slds-text-heading--label">Passenger {!v.passenger_index_for_edit} </h1>
+                    </legend>
+                <table class="slds-table" >
+            
+                    <tr>
+                        <td><lightning:input label="Email" name="email" type="email" value="{!v.passenger.Email__c}"   required="true"/></td>
+                        <td ><br /><lightning:button label="Search/Add" name="Get" onclick="{!c.getCustomerDetails}"/></td>
+                    </tr> 
+                    <tr>
+                        <td><lightning:input label="Name" name="name" type="string" value="{!v.passenger.Name__c}"   required="true"/></td>
+                        <td><lightning:input label="Date of Birth:" name="DOB" type="date" value="{!v.passenger.DOB__c}"   required="true" /></td>
+                    </tr> 
+                    <tr>
+                          <td> <lightning:select name="selectGender" label="Gender"   required="true">
+                            <option value="">--Gender--</option>
+                            <option value="1">Male</option>
+                            <option value="2">Female</option>
+                            </lightning:select>
+                        </td>
+                        <td><lightning:input label="Mobile No" name="Phone" type="phone" value="{!v.passenger.Mobile_No__c}"   required="true"/></td>
+                       
+                    </tr> 
+                    <tr>
+                         <td><lightning:input label="Government ID:" name="Government_ID" type="string" value="{!v.passenger.Government_ID__c}"   required="true" /></td>
+                        <td><lightning:input label="Address" name="Address" type="TextArea" value="{!v.passenger.Address__c}"   required="true"/></td>
+                        
+                    </tr>
+                    <tr>
+                        <td>
+                               <td><lightning:button label="Add" name="AddPassenger"  onclick="{!c.AddPassenger}"/></td>
+                        </td>
+                    </tr>
+                </table>
+                </fieldset>
+            </lightning:layoutItem>
+        </lightning:layout>
+    </div>
+    
+    <div aura:id="AdditionalPassenger">
+     <lightning:layout >
+            <lightning:layoutItem size="12" >
+                 <fieldset class="slds-box">
+                  <legend id="newbookingform" class="slds-text-heading--small 
+                                                       slds-p-vertical--medium">
+                       <h1 class="slds-text-heading--label">Co-Passengers </h1>
+                    </legend>
+                <table class="slds-table" >
+                   
+                    <tr>
+                        <td><lightning:input label="Name:" name="name" type="string" value="{!v.passenger.Name__c}"   required="true"/></td>
+                        <td><lightning:input label="Age:" name="age" type="intenger" value="{!v.passenger.Age__c}"   required="true"/></td>
+                        <td> <lightning:select name="selectGender" label="Gender"   required="true" >
+                            <option value="">--Gender--</option>
+                            <option value="1">Male</option>
+                            <option value="2">Female</option>
+                            </lightning:select>
+                        </td>
+                    </tr> 
+                    
+                    <tr>
+                        <td>
+                               <td><lightning:button label="Add" name="AddPassenger"  onclick="{!c.AddPassenger}"/></td>
+                        </td>
+                    </tr>
+                </table>
+                </fieldset>
+            </lightning:layoutItem>
+        </lightning:layout>
+    </div> 
+    <!-- / Passenger Details -->
+    <div style="padding-right:40%;padding-left:45%;padding-top:10px;padding-bottom:10px">
+         <lightning:button label="Book" class="slds" onclick="{!c.goToPayment}" />
+    </div>
+   
+</aura:component>

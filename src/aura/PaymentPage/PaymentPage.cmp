@@ -1,0 +1,93 @@
+<aura:component >
+  <aura:registerEvent name="bubblingEvent" type="c:processNextEvent"/>
+     <aura:handler event="c:aeEvent" action="{!c.handleApplicationEvent}"/>
+    <!-- Attributes -->
+     <aura:attribute name="flight" type="FlightDetail__c" 
+                    default="{ 'sobjectType': 'FlightDetail__c',
+                             Name:'3505', 
+                             from__c:'Lucknow', 
+                             to__c:'Bangalore', 
+                             Journey_Date__c:'9/9/2017',
+                             Departure__c:'12:30',
+                             Arrival__c:'02:30',
+                             Duration__c:'02:00'}"/>
+    <aura:attribute name="number_of_passenger" type="integer" default="0" />
+    <aura:attribute name="passenger_index_for_edit" type="integer" default="1"/>
+     <aura:attribute name="passenger" type="CustomerDetail__c" 
+                     default="{ 'sobjectType': 'CustomerDetail__c', 
+                              
+                              }"/>
+      <aura:attribute name="passengers" type="CustomerDetail__c[]" />
+ 
+    <!--/ Attributes -->
+    
+     <!-- Flight Details -->
+    <lightning:layout >
+        <lightning:layoutItem size="12" padding="around-small">
+            <table class="slds-table slds-table--bordered slds-table--striped" >
+                <th>
+                    <h1 class="slds-text-heading--label">Flight Details</h1>
+                </th>
+               
+                <tr>
+                    <td>Flight: {!v.flight.Name}<br />
+                        From: {!v.flight.from__c}<br />
+                        Departure: {!v.flight.Departure__c}</td>
+                    <td>Journey Date: {!v.flight.Journey_Date__c}<br />
+                         To: {!v.flight.to__c}<br />
+                         Arrival: {!v.flight.Arrival__c}</td>
+                     <td><br />Travel Time: {!v.flight.Duration__c}</td>
+                </tr> 
+            </table>
+        </lightning:layoutItem>
+    </lightning:layout>
+    <!-- / Flight Details -->
+    
+    <!-- Passenger List-->
+       <lightning:layout >
+    <lightning:layoutItem size="12" padding="around-small"  >
+           <div id="PassengerDeatils">
+       
+        <table class="slds-table slds-table--bordered slds-table--striped" >
+             <th>
+                        <h1 class="slds-text-heading--label">Passenger Details</h1>
+                    </th>
+            <tr  class="slds-text-heading--small slds-p-vertical--medium" Style="color:blue;backgroud-color:green">
+               	<th>Serial No.</th>
+                <th>Customer Name</th>
+                <Th>Age</Th>
+                <tH>Mobile Number</tH>
+                <th></th>
+            </tr>
+            
+            <tbody>
+                <aura:iteration var="p" items="{!v.passengers}" indexVar="index">
+                     <tr>
+                         <td>{!index+1}</td>
+                        <td>{!p.Name__c}</td>
+                        <td>{!p.Age__c}</td>
+                        <td>{!p.Mobile_No__c}</td>
+                       
+                    </tr> 
+                </aura:iteration>             
+                   
+                
+            </tbody>
+            
+            
+        </table>
+        
+  
+    </div>
+        </lightning:layoutItem>
+    </lightning:layout>
+  
+    <!-- / Pasenger List-->
+    
+    <lightning:button label="Confirm and Pay"/>
+    <lightning:layout >
+        <lightning:layoutItem >
+            
+        </lightning:layoutItem>
+    </lightning:layout>
+</aura:component>
