@@ -3,6 +3,25 @@
         
         var flight=component.get("v.flight");
         
+        //START Validation 
+        var errors=  component.get("v.errors");
+        errors=[];
+        var from=component.find("fromCity").get("v.value");
+        if(from==''){
+            errors.push("Enter Source city");
+        }
+        var from=component.find("toCity").get("v.value");
+        if(from==''){
+            errors.push("Enter Destination city");
+        }
+        var from=component.find("journeyDate").get("v.value");
+        if(from==''){
+            errors.push("Enter Date of Travel");
+            
+        }
+        component.set("v.errors",errors);
+          //END Validation 
+        
         if(flight.from__c!=''&&flight.to__c&&flight.Journey_Date__c){
             console.log(flight.from__c);
             var action = component.get("c.getSearchFlights");
@@ -15,6 +34,11 @@
                 var name = response.getState();
                 if (name === "SUCCESS") {
                     component.set("v.Flights",response.getReturnValue());
+                    if(response.getReturnValue()==''){
+                         errors.push("Opps..!!! No Direct Flight");
+                          component.set("v.errors",errors);
+                        
+                    }
                     
                 }else{
                     component.set("v.result", "No data");
@@ -22,7 +46,7 @@
             });
             $A.enqueueAction(action);
         }else{
-             alert("Please Enter correct infromation");
+           //  alert("Please Enter correct infromation");
         }
        
     },

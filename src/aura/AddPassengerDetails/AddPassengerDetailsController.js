@@ -2,8 +2,8 @@
      
     getCustomerDetails:function(component, event, helper) {
 		var email=component.get("v.passenger.Email__c"); 
-        console.log(email); //validation to email is pending
-        
+      
+         var status=component.get("v.customer_status");
         
         var action = component.get("c.getCustomerByEmail");
         
@@ -15,9 +15,17 @@
             var name = response.getState();
             if (name === "SUCCESS") {
                 component.set("v.passenger",response.getReturnValue());
+                if(response.getReturnValue()!=''){
+                    component.set("v.customer_status","Customer Details found Please Review them..!!!");
+                    document.getElementById("customer_status").style.color="Green";
+                }
+               
                 
             }else if (response.getState() === "ERROR") {
                 $A.log("Errors", response.getError());
+                  component.set("v.customer_status","Customer Details Not found Please Add ..!!!");
+                    document.getElementById("customer_status").style.color="Red";
+                
             }
         });
     
@@ -44,6 +52,12 @@
 	},
     AddPassenger: function(component) {
         document.getElementById('PassengerDeatils').scrollIntoView();
+        //START Validation 
+        var errors=  component.get("v.errors");
+        errors=[];
+        component.set("v.errors",errors);
+        //END Validation 
+        
         var num=component.get("v.number_of_passenger");
         var p=component.get("v.passenger");
         var customer={'sobjectType':'CustomerDetail__c',
@@ -67,6 +81,7 @@
         console.log("Number:"+num);
         component.set("v.number_of_passenger",num);
         document.getElementById('Passenger1').style.display = 'none';
+        document.getElementById('Co_Passenger').style.display = 'block';
     },
     Add_Co_Passenger:function(component) {
           document.getElementById('PassengerDeatils').scrollIntoView();
@@ -138,17 +153,36 @@
         console.log(message+flight.Name);
     },
     goToPayment: function (component, event) {
-          var cmpEvent=component.getEvent("bubblingEvent");
-        cmpEvent.setParams({"ComponentAction":"AddPassengers_next"});
-        cmpEvent.fire();
+        
+        
+        
+          var inputCmp = component.find("btnGoToPayment");
+        var value = inputCmp.get("v.value");
+
+       
+        
         var passengers=component.get("v.passengers");
-        var appEvent = $A.get("e.c:aeEvent");
-        appEvent.setParams({
-            "message" : "Passenger Add",
+        if(passengers.length>0){
+            var cmpEvent=component.getEvent("bubblingEvent");
+            cmpEvent.setParams({"ComponentAction":"AddPassengers_next"});
+            cmpEvent.fire();
+            var appEvent = $A.get("e.c:aeEvent");
+            appEvent.setParams({
+                "message" : "Passenger Add",
                 "passengers":passengers,
-            "flight":component.get("v.flight")
+                "flight":component.get("v.flight")
             });
-        appEvent.fire();
+            appEvent.fire();
+        }else{
+            //START Validation 
+            var errors=  component.get("v.errors");
+            errors=[];
+            errors.push("Enter Atleast one passenger Detail");
+            component.set("v.errors",errors);
+            document.getElementById('PassengerDeatils').scrollIntoView();
+            //END Validation 
+        }
+        
     },
     
     

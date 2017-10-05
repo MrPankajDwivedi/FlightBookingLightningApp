@@ -25,6 +25,8 @@
                               'Gender__c':'Male'
                               }"/>
       <aura:attribute name="passengers" type="CustomerDetail__c[]" />
+     <aura:attribute name="errors" type="string[]" default=""/>
+    <aura:attribute name="customer_status" type="string" default="Search the customer Detail by Email"/>
  
     <!--/ Attributes -->
     
@@ -52,20 +54,25 @@
     <lightning:layout >
     <lightning:layoutItem size="12" class="slds-border_right slds-border_left slds-border_bottom" >
            <div id="PassengerDeatils">
-       
-        <table class="slds-table" >
-          
-             <th>
-                        <h1 class="slds-text-heading--label">Passenger Details</h1>
-                    </th>
-            <tr  class="slds-text-heading--small slds-p-vertical--medium" Style="color:white;background-color:#4286f4">
-               	<th style="width:10%">Serial No.</th>
-                <th style="width:40%">Passenger Name</th>
-                <Th style="width:10%">Age</Th>
-                <tH  style="width:20%">Gender</tH>
-                <th style="width:20%"></th>
-            </tr>
-            
+               <tr>
+                   <aura:iteration var="error" items="{!v.errors}" indexVar="index">
+                       <tr style="color:red">{!index+1} : {!error}</tr>
+                   </aura:iteration>
+                   
+               </tr>
+               <table class="slds-table" >
+                   
+                   <th>
+                       <h1 class="slds-text-heading--label">Passenger Details</h1>
+                   </th>
+                   <tr  class="slds-text-heading--small slds-p-vertical--medium" Style="color:white;background-color:#4286f4">
+                       <th style="width:10%">Serial No.</th>
+                       <th style="width:40%">Passenger Name</th>
+                       <Th style="width:10%">Age</Th>
+                       <tH  style="width:20%">Gender</tH>
+                       <th style="width:20%"></th>
+                   </tr>
+                   
             <tbody>
                 <aura:iteration var="p" items="{!v.passengers}" indexVar="index">
                      <tr>
@@ -108,10 +115,16 @@
                        <h1 class="slds-text-heading--label">Passenger {!v.passenger_index_for_edit} </h1>
                     </legend>
                 <table class="slds-table" >
-            
+                    <tr>
+                        <h1 style="color:Blue" id="customer_status">
+                            {!v.customer_status}
+                        </h1>
+                    </tr>
                     <tr>
                         <td><lightning:input label="Email" name="email" type="email" value="{!v.passenger.Email__c}"   required="true"/></td>
-                        <td ><br /><lightning:button label="Search/Add" name="Get" onclick="{!c.getCustomerDetails}"/></td>
+                        <td ><br /><lightning:button variant="brand"  class="slds-button" label="Search" name="Get" onclick="{!c.getCustomerDetails}"/>
+                           
+                        </td>
                     </tr> 
                     <tr>
                         <td><lightning:input label="Name" name="name" type="string" value="{!v.passenger.Name__c}"   required="true"/></td>
@@ -129,12 +142,13 @@
                     </tr> 
                     <tr>
                          <td><lightning:input label="Government ID:" name="Government_ID" type="string" value="{!v.passenger.Government_ID__c}"   required="true" /></td>
-                        <td><lightning:input label="Address" name="Address" type="TextArea" value="{!v.passenger.Address__c}"   required="true"/></td>
-                        
+                        <td>  <lightning:textarea name="Address" value="{!v.passenger.Address__c}" 
+                                            label="Address" maxlength="300" required="true" /></td>
+                      
                     </tr>
                     <tr>
                         <td>
-                               <td><lightning:button label="Add" name="AddPassenger"  onclick="{!c.AddPassenger}"/></td>
+                               <td><lightning:button variant="brand"  class="slds-button" label="Add" name="AddPassenger"  onclick="{!c.AddPassenger}"/></td>
                         </td>
                     </tr>
                 </table>
@@ -143,7 +157,7 @@
         </lightning:layout>
     </div>
     
-    <div id="Co_Passenger">
+    <div id="Co_Passenger" style="display:none">
      <lightning:layout >
             <lightning:layoutItem size="12" >
                  <fieldset class="slds-box">
@@ -166,7 +180,7 @@
                     
                     <tr>
                         <td>
-                               <td><lightning:button label="Add" name="AddPassenger"  onclick="{!c.Add_Co_Passenger}"/></td>
+                               <td><lightning:button variant="brand"  class="slds-button" label="Add" name="AddPassenger"  onclick="{!c.Add_Co_Passenger}"/></td>
                         </td>
                     </tr>
                 </table>
@@ -178,7 +192,7 @@
     <div class="slds-align_absolute-center" >
         <lightning:layout >
             <lightning:layoutItem padding="around-small">
-             <lightning:button label="Book" variant="brand"  class="slds-button"  onclick="{!c.goToPayment}" />
+             <lightning:button aura:id="btnGoToPayment" label="Book" variant="brand"  class="slds-button"  onclick="{!c.goToPayment}" />
             </lightning:layoutItem>
         </lightning:layout>
         

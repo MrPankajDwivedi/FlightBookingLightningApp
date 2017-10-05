@@ -6,8 +6,9 @@
                              Name:'Fdemo9878', 
                              from__c:'Kanpur', 
                              to__c:'Lucknow', 
-                             Journey_Date__c:'2017-01-01'}" />
+                             Journey_Date__c:'2017-10-10'}" />
     <aura:attribute name="Flights" type="FlightDetail__c[]" />
+    <aura:attribute name="errors" type="string[]" default=""/>
 
     <div >
     
@@ -30,20 +31,29 @@
                         <table class="slds-table">
                             <tr>
                                 <td>
-                                    <lightning:input aura:id="bookingform" label="From" name="from" value="{!v.flight.from__c}" required="true" />
+                                    <lightning:input aura:id="fromCity" label="From" placeholder="source city name" 
+                                                     name="from" value="{!v.flight.from__c}" required="true" />
                                 </td>
                                 <td>
-                                    <lightning:input aura:id="bookingform" label="To" name="to" value="{!v.flight.to__c}" required="true" />
+                                    <lightning:input aura:id="toCity" label="To" placeholder="destination city name" 
+                                                     name="to" value="{!v.flight.to__c}" required="true" />
                                 </td>
 
                                 <td>
-                                    <lightning:input type="date" aura:id="bookingform" label="Journey Date" name="journeydate" value="{!v.flight.Journey_Date__c}" required="true" />
+                                    <lightning:input type="date" class="slds" aura:id="journeyDate" label="Journey Date" 
+                                                     name="journeydate" value="{!v.flight.Journey_Date__c}" required="true" />
                                 </td>
 
                                 <td>
 
-                                    <lightning:button variant="brand" class="slds-m-top--medium" label="Search" iconName="utility:search" iconPosition="left" onclick="{!c.searchFlight }" />
+                                    <lightning:button aura:id="bookingform" variant="brand" class="slds-m-top--medium" label="Search" iconName="utility:search" iconPosition="left" onclick="{!c.searchFlight }" />
                                 </td>
+                            </tr>
+                            <tr>
+                                <aura:iteration var="error" items="{!v.errors}" indexVar="index">
+                                  <tr style="color:red">{!index+1} : {!error}</tr>
+                                </aura:iteration>
+                              
                             </tr>
                         </table>
                         <!-- / CREATE NEW EXPENSE FORM -->

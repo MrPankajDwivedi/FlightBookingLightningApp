@@ -18,9 +18,9 @@ global with sharing  class FlightBooking {
      @auraEnabled
     public static CustomerDetail__c getCustomerByEmail(String email)
     {
-       
-        CustomerDetail__c reg=[select Name__c, DOB__c, Age__c, Email__c, Mobile_No__c,Government_ID__c, Address__c,Gender__c from CustomerDetail__c where Email__c=:email];
-        return reg;
+       CustomerDetail__c cust=new CustomerDetail__c();
+        cust=[select Name__c, DOB__c, Age__c, Email__c, Mobile_No__c,Government_ID__c, Address__c,Gender__c from CustomerDetail__c where Email__c=:email];
+        return cust;
     } 
     
       @auraEnabled
