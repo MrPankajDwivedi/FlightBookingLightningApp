@@ -15,13 +15,11 @@
 
 
     <div >
-    
-
         <lightning:layout >
             <lightning:layoutItem size="12" class="slds-grid--align-center">
 
                 <!-- CREATE NEW EXPENSE -->
-                <div aria-labelledby="newbookingform">
+                <div id="divp" aria-labelledby="newbookingform">
 
                     <!-- BOXED AREA -->
                     <fieldset class="slds-box">
@@ -56,7 +54,7 @@
                                     <lightning:button aura:id="bookingform" variant="brand" class="slds-m-top--medium" label="Search" iconName="utility:search" iconPosition="left" onclick="{!c.searchFlight }" />
                                 </td>
                             </tr>
-                            <tr> <div style="position:absolute; top:42%;left:5%">
+                            <tr> <div style="position:absolute; top:'divp';">
                             <table class="slds-table" cellspacing="0" cellpadding="0" style="width:270px">
                               <tr>
                                     <aura:iteration var="city" items="{!v.fromCities}" >
@@ -71,7 +69,7 @@
                                  </tr>
                                 </table> 
                                 </div>
-                                <div style="position:absolute; top:42%;left:31%">
+                                <div style="position:absolute; top:'divp'; left:31%">
                                     <table  class="slds-table" cellspacing="0" cellpadding="0" style="width:270px">
                                          <tr >
                                     <aura:iteration var="city" items="{!v.toCities}" >
