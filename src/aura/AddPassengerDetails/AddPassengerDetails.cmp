@@ -126,29 +126,29 @@
                         </aura:iteration>
                     </tr>
                     <tr>
-                        <td><lightning:input label="Email"  name="email" type="email" value="{!v.passenger.Email__c}"   required="true"/></td>
+                        <td><lightning:input label="Email" aura:id="customerEmail" name="email" type="email" value="{!v.passenger.Email__c}"   /></td>
                         <td ><br /><lightning:button variant="brand"  class="slds-button" label="Search" name="Get" onclick="{!c.getCustomerDetails}"/>
                            
                         </td>
                     </tr> 
                     <tr>
-                        <td><lightning:input label="Name" aura:id="name" name="name" type="string" value="{!v.passenger.Name__c}"   required="true"/></td>
-                        <td><lightning:input label="Date of Birth:" aura:id="dob" name="DOB" type="date" value="{!v.passenger.DOB__c}"   required="true" /></td>
+                        <td><lightning:input label="Name" aura:id="name" name="name" type="string" value="{!v.passenger.Name__c}"   /></td>
+                        <td><lightning:input label="Date of Birth:" aura:id="dob" name="DOB" type="date" value="{!v.passenger.DOB__c}"   /></td>
                     </tr> 
                     <tr>
-                          <td> <lightning:select aura:id="gender__ddl" label="Gender" name="selectGender" value="{!v.passenger.Gender__c}"  required="true">
+                          <td> <lightning:select aura:id="gender__ddl" label="Gender" name="selectGender" value="{!v.passenger.Gender__c}"  >
                             <option value="--Select--">--Gender--</option>
                             <option value="Male">Male</option>
                             <option value="Female">Female</option>
                             </lightning:select>
                         </td>
-                        <td><lightning:input label="Mobile No" aura:id="mobile" name="Phone" type="phone" value="{!v.passenger.Mobile_No__c}"   required="true"/></td>
+                        <td><lightning:input label="Mobile No" aura:id="mobile" name="Phone" type="phone" value="{!v.passenger.Mobile_No__c}"   /></td>
                        
                     </tr> 
                     <tr>
-                         <td><lightning:input label="Government ID:" aura:id="government_id" name="Government_ID" type="string" value="{!v.passenger.Government_ID__c}"   required="true" /></td>
+                         <td><lightning:input label="Government ID:" aura:id="government_id" name="Government_ID" type="string" value="{!v.passenger.Government_ID__c}"    /></td>
                         <td>  <lightning:textarea name="Address" aura:id="address" value="{!v.passenger.Address__c}" 
-                                            label="Address" maxlength="300" required="true" /></td>
+                                            label="Address" maxlength="300" /></td>
                       
                     </tr>
                     <tr>
@@ -175,9 +175,9 @@
                             <tr style="color:red">{!index+1} : {!error}</tr>
                         </aura:iteration>
                     <tr>
-                        <td><lightning:input label="Name:" name="name" type="string" value="{!v.co_passenger.Name__c}"   required="true"/></td>
-                        <td><lightning:input label="Age:" name="age" type="intenger" value="{!v.co_passenger.Age__c}"   required="true"/></td>
-                        <td> <lightning:select name="selectGender" label="Gender" value="{!v.co_passenger.Gender__c}"   required="true" >
+                        <td><lightning:input label="Name:" name="name" type="string" value="{!v.co_passenger.Name__c}"  /></td>
+                        <td><lightning:input label="Age:" name="age" type="intenger" value="{!v.co_passenger.Age__c}"  /></td>
+                        <td> <lightning:select name="selectGender" label="Gender" value="{!v.co_passenger.Gender__c}"   >
                             <option value="--Select--">--Gender--</option>
                             <option value="Male">Male</option>
                             <option value="Female">Female</option>
