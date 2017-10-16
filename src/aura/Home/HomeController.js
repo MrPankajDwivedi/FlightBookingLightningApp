@@ -7,7 +7,8 @@
         console.log(key);
        
         var people = ['Kanpur', 'Lucknow', 'Bangalore', 'Delhi'];
-        var reg = new RegExp(key.split('').join('\\w*').replace(/\W/, ""), 'i');
+        if(key!=null&&key.length>2){
+             var reg = new RegExp(key.split('').join('\\w*').replace(/\W/, ""), 'i');
         people.filter(function(person) {
            if (person.match(reg)) {
                console.log("matched: "+person);
@@ -18,6 +19,10 @@
        });
         
         component.set("v.fromCities",result);
+        }else{
+             component.set("v.fromCities",null);
+        }
+       
         if(result.length==1){
            console.log(result[0]);        
         }
@@ -35,7 +40,7 @@
         var result=component.get('v.toCities');
         result=[];	
         console.log(key);
-       
+        if(key!=null&&key.length>2){
         var people = ['Kanpur', 'Lucknow', 'Bangalore', 'Delhi'];
         var reg = new RegExp(key.split('').join('\\w*').replace(/\W/, ""), 'i');
         people.filter(function(person) {
@@ -48,6 +53,9 @@
        });
         
         component.set("v.toCities",result);
+        }else{
+             component.set("v.toCities",null);
+        }
         if(result.length==1){
            console.log(result[0]);        
         }

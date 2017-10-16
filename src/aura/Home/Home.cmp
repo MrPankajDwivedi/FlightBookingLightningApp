@@ -36,19 +36,19 @@
                             <tr>
                                 <td>
                                     <lightning:input aura:id="fromCity" label="From" placeholder="source city name" 
-                                                     name="from" value="{!v.flight.from__c}" required="true" 
+                                                     name="from" value="{!v.flight.from__c}" 
                                                      onchange="{!c.fromCityAutoSuggestion}"
                                                      />
                                 </td>
                                 <td>
                                     <lightning:input aura:id="toCity" label="To" placeholder="destination city name" 
-                                                     name="to" value="{!v.flight.to__c}" required="true"
+                                                     name="to" value="{!v.flight.to__c}" 
                                                        onchange="{!c.toCityAutoSuggestion}"/>
                                 </td>
 
                                 <td>
                                     <lightning:input type="date" class="slds" aura:id="journeyDate" label="Journey Date" 
-                                                     name="journeydate" value="{!v.flight.Journey_Date__c}" required="true" />
+                                                     name="journeydate" value="{!v.flight.Journey_Date__c}"  />
                                 </td>
 
                                 <td>
@@ -56,30 +56,37 @@
                                     <lightning:button aura:id="bookingform" variant="brand" class="slds-m-top--medium" label="Search" iconName="utility:search" iconPosition="left" onclick="{!c.searchFlight }" />
                                 </td>
                             </tr>
-                            <tr> <div style="position:absolute; top:32%">
-                                <td >
+                            <tr> <div style="position:absolute; top:42%;left:5%">
+                            <table class="slds-table" cellspacing="0" cellpadding="0" style="width:270px">
+                              <tr>
                                     <aura:iteration var="city" items="{!v.fromCities}" >
-                                        
-                                        
+                                        <tr  >
                                         <lightning:button class="slds-button"
                                                           label="" value="{!city}" 
                                                           onclick="{!c.from_clicked}">
                                          {!city}
                                         </lightning:button>
-                                        
+                                        </tr>
                                     </aura:iteration>
-                                </td>
-                                 <td >
+                                 </tr>
+                                </table> 
+                                </div>
+                                <div style="position:absolute; top:42%;left:31%">
+                                    <table  class="slds-table" cellspacing="0" cellpadding="0" style="width:270px">
+                                         <tr >
                                     <aura:iteration var="city" items="{!v.toCities}" >
-                                        
+                                        <tr>
+                                       
                                         <lightning:button class="slds-button"
                                                           label="" value="{!city}" 
                                                           onclick="{!c.to_clicked}">
                                          {!city}
                                         </lightning:button>
-                                        
+                                         </tr>
                                     </aura:iteration>
-                                </td>
+                                </tr>
+                                    </table>
+                               
                                 </div></tr>
                             <tr>
                                 <aura:iteration var="error" items="{!v.errors}" indexVar="index">
