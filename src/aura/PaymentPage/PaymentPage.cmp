@@ -18,6 +18,8 @@
                               
                               }"/>
       <aura:attribute name="passengers" type="CustomerDetail__c[]" />
+    <aura:attribute name="orderStatus" type="string" default="Payment pending"/>
+    <aura:attribute name="totalFare"  type="currency" default="7500"/>
    
  
     <!--/ Attributes -->
@@ -26,9 +28,11 @@
     <lightning:layout >
         <lightning:layoutItem size="12" class="slds-border_right slds-border_left">
             <table class="slds-table slds-table--bordered slds-table--striped" >
-                <th>
-                    <h1 class="slds-text-heading--label">Flight Details</h1>
-                </th>
+                <tr >
+                    <td colspan="2"><h1 class="slds-text-heading--label">Flight Details</h1></td>
+                    
+                    <td><h1>Order status: {!v.orderStatus}</h1></td>
+                </tr>
                
                 <tr>
                     <td>Flight: {!v.flight.Name}<br />
@@ -80,7 +84,7 @@
                         Total Fare:
                     </td>
                     <td>
-                        Rs. 7850/-
+                        Rs. {!v.totalFare}/-
                     </td>
                 </tr>
             </tbody>
@@ -95,12 +99,21 @@
   
     <!-- / Pasenger List-->
     
-   <div class="slds-align_absolute-center">
+   <div class="slds-align_absolute-center" id="confirmBtnDiv">
        <lightning:layout >
         <lightning:layoutItem padding="around-small" >
              <lightning:button label="Confirm and Receive Payment" variant="brand"  class="slds-button" onclick="{!c.bookFlightClient}"/>
         </lightning:layoutItem>
     </lightning:layout>
+    </div>
+    <div class="slds-align_absolute-center" id="successfulBookingDiv" style="display:'none'">
+        <lightning:layout >
+            <lightning:layoutItem padding="around-small" class="slds-align_absolute-center">
+                <lightning:button label="Print" variant="brand"  class="slds-button" onclick="{!c.print}"/>
+                <lightning:button label="New Booking" variant="brand"  class="slds-button" onclick="{!c.newBooking}"/>
+                
+            </lightning:layoutItem>
+        </lightning:layout>
     </div>
     
 </aura:component>

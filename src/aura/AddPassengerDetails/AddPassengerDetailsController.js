@@ -4,14 +4,15 @@
 		var email=component.get("v.passenger.Email__c"); 
       
          var status=component.get("v.customer_status");
-        
-        var action = component.get("c.getCustomerByEmail");
-        
+        if(email!=''){
+             var action = component.get("c.getCustomerByEmail");
+          var spinner = component.find("search_customer_spinner");
         action.setParams({
             email:component.get("v.passenger.Email__c")
         });
-        
-        action.setCallback(this, function(response){
+        if(email!=''){
+                $A.util.toggleClass(spinner, "slds-hide");
+             action.setCallback(this, function(response){
             var name = response.getState();
             if (name === "SUCCESS") {
                 component.set("v.passenger",response.getReturnValue());
@@ -20,45 +21,96 @@
                     document.getElementById("customer_status").style.color="Green";
                 }
                
-                
+                 $A.util.toggleClass(spinner, "slds-hide");      
             }else if (response.getState() === "ERROR") {
                 $A.log("Errors", response.getError());
                   component.set("v.customer_status","Customer Details Not found Please Add ..!!!");
                     document.getElementById("customer_status").style.color="Red";
-                
+                 $A.util.toggleClass(spinner, "slds-hide");      
             }
         });
     
-     $A.enqueueAction(action);    
+     $A.enqueueAction(action);   
+        }else{
+            
+        }
+        }else{
+              var errors=  component.get("v.errors");
+        errors=[];
+      
+            errors.push("Enter Valid Email");
+            component.set("v.errors",errors);
+       
+        }
+       
+        
 	},
+    
 	goToEdit : function(component, event, helper) {
-	document.getElementById('Passenger1').scrollIntoView();
       var index=event.getSource().get("v.value");
+         document.getElementById('Co_Passenger').style.display = 'none'; 
+          document.getElementById('Passenger1').style.display = 'none'; 
         console.log("Value cliced:"+index);  
         if(index==0){
             document.getElementById('Passenger1').style.display = 'block'; 
+            document.getElementById('Passenger1').scrollIntoView();
             var passengers=component.get("v.passengers");   
             console.log(passengers[index].Name__c);
             component.set("v.passenger",passengers[index]);
         }else{
+            document.getElementById('Co_Passenger').style.display = 'block'; 
             document.getElementById('Co_Passenger').scrollIntoView();
             var passengers=component.get("v.passengers");   
             console.log(passengers[index].Name__c);
-            component.set("v.co_passenger",passengers[index]);
-            var a = component.get('c.update_Co_Passenger');
-            $A.enqueueAction(a);
-            
+            component.set("v.co_passenger",passengers[index]); 
+            component.set("v.customerIndex",index);
         }  
 	},
-    AddPassenger: function(component) {
-        document.getElementById('PassengerDeatils').scrollIntoView();
+    
+    AddPassenger: function(component, event, helper) {
+       var error=false;
         //START Validation 
         var errors=  component.get("v.errors");
         errors=[];
+        //console.log("error");
+           var name=component.find("name").get("v.value");
+         console.log(name);
+        if(name==''){
+            errors.push("Enter Customer Name");
+             console.log("error name");
+            error=true;
+        }
+        var dob=component.find("dob").get("v.value");
+        if(dob==''){
+            errors.push("Enter DOB");
+             error=true;
+        }
+        var gender=component.find("gender__ddl").get("v.value");
+        if(gender==''){
+            errors.push("Enter Gender");
+             error=true;
+        }
+           var mobile=component.find("mobile").get("v.value");
+        if(mobile==''){
+            errors.push("Enter Mobile No.");
+             error=true;
+        }
+            var gov_id=component.find("government_id").get("v.value");
+        if(gov_id==''){
+            errors.push("Enter Government ID");
+             error=true;
+        }
+            var address=component.find("address").get("v.value");
+        if(address==''){
+            errors.push("Enter address");
+             error=true;
+        }
         component.set("v.errors",errors);
-        //END Validation 
         
-        var num=component.get("v.number_of_passenger");
+      
+        //END Validation 
+        if(!error){
+             var num=component.get("v.number_of_passenger");
         var p=component.get("v.passenger");
         var customer={'sobjectType':'CustomerDetail__c',
                       'Name__c':p.Name__c,
@@ -82,57 +134,74 @@
         component.set("v.number_of_passenger",num);
         document.getElementById('Passenger1').style.display = 'none';
         document.getElementById('Co_Passenger').style.display = 'block';
+        
+          //update in database
+         console.log("Upadte customer1");
+        var action = component.get("c.updateCustomer");
+         console.log("Upadte customer2");
+            action.setParams({
+                "customer":p,   
+            });
+         console.log("Upadte customer3");
+            action.setCallback(this, function(response){
+                var name = response.getState();
+                if (name === "SUCCESS") {
+                    console.log("Successful");
+                    component.set("v.passenger",response.getReturnValue());
+                    
+                      
+                    component.set("v.passengers[0]",response.getReturnValue());
+                    
+                 
+                    console.log("Age:"+response.getReturnValue().Name__c+""+response.getReturnValue().Age__C);
+                    if(response.getReturnValue()==''){
+                        console.log("Error ");
+                       
+                    }
+					  document.getElementById('PassengerDeatils').scrollIntoView();                
+                }else{
+                    console.log("un-Successful ");
+				}
+            });
+        
+            $A.enqueueAction(action);
+        
+        }
+       
+       
     },
+    
     Add_Co_Passenger:function(component) {
           document.getElementById('PassengerDeatils').scrollIntoView();
         var num=component.get("v.number_of_passenger");
         var p=component.get("v.co_passenger");
-        var customer={'sobjectType':'CustomerDetail__c',
+        var passengers=component.get("v.passengers"); 
+        if(p.Name__c!=''&&p.Age__c&&p.Gender__c){
+              var customer={'sobjectType':'CustomerDetail__c',
                       'Name__c':p.Name__c,
                       'Age__c':p.Age__c,
-                      'Gender__c':component.find("gender__ddl").get("v.value")
+                      'Gender__c':p.Gender__c,
                      }
-        console.log("Customer:"+customer.Name__c);
-        
-        
-        // var passenger=component.get("v.passenger"); 
-        var passengers=component.get("v.passengers"); 
-        console.log(passengers);
-        passengers.push(customer);
-        console.log(passengers);         
+      //  console.log(passengers);
+       var index=component.get("v.customerIndex");
+        if(index==0){
+              passengers.push(customer);
+        }else{
+            passengers[index]=customer;
+        }
+      
+      //  console.log(passengers);         
         component.set("v.passengers",passengers);
-        num=num+1;
-        console.log("Number:"+num);
-        component.set("v.number_of_passenger",num);
-        
-        
-        
+        }else{
+             var errors=  component.get("v.errors1");
+        errors=[];
+            errors.push('Enter All Details');
+            component.set('v.errors1',errors);
+        }
+      
+     
     },
-      update_Co_Passenger:function(component,index) {
-          document.getElementById('PassengerDeatils').scrollIntoView();
-        var num=component.get("v.number_of_passenger");
-        var p=component.get("v.co_passenger");
-        var customer={'sobjectType':'CustomerDetail__c',
-                      'Name__c':p.Name__c,
-                      'Age__c':p.Age__c,
-                      'Gender__c':component.find("gender__ddl").get("v.value")
-                     }
-        console.log("Customer:"+customer.Name__c);
-        
-        
-        // var passenger=component.get("v.passenger"); 
-        var passengers=component.get("v.passengers"); 
-        console.log(passengers);
-        passengers[index]=customer;
-        console.log(passengers);         
-        component.set("v.passengers",passengers);
-        num=num+1;
-        console.log("Number:"+num);
-        component.set("v.number_of_passenger",num);
-        
-        
-        
-    },
+    
     handleAppData:function(component, event, helper){
         
         var message = event.getParam("message");
@@ -145,6 +214,7 @@
         //  component.set("v.flight",params);
         
     },
+    
     handleApplicationEvent : function (component, event) {
         var message = event.getParam("message");
         var flight=event.getParam("flight");
@@ -152,6 +222,7 @@
         // set the handler attributes based on event data
         console.log(message+flight.Name);
     },
+    
     goToPayment: function (component, event) {
         
         

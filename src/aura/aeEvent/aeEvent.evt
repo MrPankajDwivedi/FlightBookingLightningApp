@@ -3,4 +3,5 @@
     <aura:attribute name="message" type="String"/>
     <aura:attribute name="flight" type="FlightDetail__c" />
      <aura:attribute name="passengers" type="CustomerDetail__c[]" />
+   
 </aura:event>

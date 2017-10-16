@@ -25,6 +25,13 @@
                 var passengerDiv=component.find("PassengerDiv");
                 $A.util.addClass(passengerDiv,'toggle');
                 break;
+            case "Booking_back":
+                var bookingDiv=component.find("BookingDiv");
+                $A.util.removeClass(bookingDiv,'toggle');
+                var paymentDiv=component.find("PaymentDiv");
+                $A.util.addClass(paymentDiv,'toggle');
+                var passengerDiv=component.find("PassengerDiv");
+                $A.util.addClass(passengerDiv,'toggle');
                 break;
                 
         }

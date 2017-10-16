@@ -41,4 +41,44 @@ global with sharing  class FlightBooking {
        
     } 
     
+     @auraEnabled
+    public static CustomerDetail__c updateCustomer(CustomerDetail__c customer)
+    {
+      CustomerDetail__c cus=customer;
+	
+        upsert cus;
+      //  system.debug('Age:'+cus.Age__c);
+        //CustomerDetail__c cus1=[select Name__c, DOB__c, Age__c, Email__c, Mobile_No__c,Government_ID__c, Address__c,Gender__c from CustomerDetail__c where Id=:cus.d];
+  		
+      return FlightBooking.getCustomerByEmail(cus.Email__c);
+       
+    } 
+    
+    @AuraEnabled 
+    public static void sendMailMethod(String mMail ,String mSubject ,String mbody){
+    
+     List<Messaging.SingleEmailMessage> mails =  new List<Messaging.SingleEmailMessage>();     
+  
+     // Step 1: Create a new Email
+       Messaging.SingleEmailMessage mail = new Messaging.SingleEmailMessage();
+    
+    // Step 2: Set list of people who should get the email
+       List<String> sendTo = new List<String>();
+       sendTo.add(mMail);
+       mail.setToAddresses(sendTo);
+    
+    // Step 3: Set who the email is sent from
+       mail.setReplyTo('noreply@flight.com'); // change it with your mail address.
+       mail.setSenderDisplayName('salesforce User'); 
+    
+    // Step 4. Set email contents - you can use variables!
+      mail.setSubject(mSubject);
+      mail.setHtmlBody(mbody);
+    
+    // Step 5. Add your email to the master list
+      mails.add(mail);
+    
+  // Step 6: Send all emails in the master list
+     Messaging.sendEmail(mails);
+}
 }

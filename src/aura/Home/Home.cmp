@@ -1,14 +1,18 @@
 <aura:component implements="force:appHostable,flexipage:availableForAllPageTypes" controller="FlightBooking">
     <aura:registerEvent name="bubblingEvent" type="c:processNextEvent" />
     <aura:registerEvent name="appEvent" type="c:aeEvent" />
+   
     <!-- NEW EXPENSE FORM -->
     <aura:attribute name="flight" type="FlightDetail__c" default="{ 'sobjectType': 'FlightDetail__c',
                              Name:'Fdemo9878', 
-                             from__c:'Kanpur', 
-                             to__c:'Lucknow', 
-                             Journey_Date__c:'2017-10-10'}" />
+                             from__c:'', 
+                             to__c:'', 
+                             Journey_Date__c:''}" />
     <aura:attribute name="Flights" type="FlightDetail__c[]" />
     <aura:attribute name="errors" type="string[]" default=""/>
+     <aura:attribute name='fromCities' type='string[]' />
+      <aura:attribute name='toCities' type='string[]' />
+
 
     <div >
     
@@ -32,11 +36,14 @@
                             <tr>
                                 <td>
                                     <lightning:input aura:id="fromCity" label="From" placeholder="source city name" 
-                                                     name="from" value="{!v.flight.from__c}" required="true" />
+                                                     name="from" value="{!v.flight.from__c}" required="true" 
+                                                     onchange="{!c.fromCityAutoSuggestion}"
+                                                     />
                                 </td>
                                 <td>
                                     <lightning:input aura:id="toCity" label="To" placeholder="destination city name" 
-                                                     name="to" value="{!v.flight.to__c}" required="true" />
+                                                     name="to" value="{!v.flight.to__c}" required="true"
+                                                       onchange="{!c.toCityAutoSuggestion}"/>
                                 </td>
 
                                 <td>
@@ -49,6 +56,31 @@
                                     <lightning:button aura:id="bookingform" variant="brand" class="slds-m-top--medium" label="Search" iconName="utility:search" iconPosition="left" onclick="{!c.searchFlight }" />
                                 </td>
                             </tr>
+                            <tr> <div style="position:absolute; top:32%">
+                                <td >
+                                    <aura:iteration var="city" items="{!v.fromCities}" >
+                                        
+                                        
+                                        <lightning:button class="slds-button"
+                                                          label="" value="{!city}" 
+                                                          onclick="{!c.from_clicked}">
+                                         {!city}
+                                        </lightning:button>
+                                        
+                                    </aura:iteration>
+                                </td>
+                                 <td >
+                                    <aura:iteration var="city" items="{!v.toCities}" >
+                                        
+                                        <lightning:button class="slds-button"
+                                                          label="" value="{!city}" 
+                                                          onclick="{!c.to_clicked}">
+                                         {!city}
+                                        </lightning:button>
+                                        
+                                    </aura:iteration>
+                                </td>
+                                </div></tr>
                             <tr>
                                 <aura:iteration var="error" items="{!v.errors}" indexVar="index">
                                   <tr style="color:red">{!index+1} : {!error}</tr>
@@ -71,7 +103,8 @@
         <lightning:layout >
             <lightning:layoutItem size="12" class="slds-border_right slds-border_left">
                 <div id="searchDeatils" >
-
+					 <lightning:spinner aura:id="search_flight_spinner" class="slds-hide"/>
+                    
                     <table class="slds-table slds-table--bordered slds-table--striped">
 
                         <tr class="slds-text-heading--small slds-p-vertical--medium" Style="color:white;background-color:#4286f4">
@@ -107,5 +140,6 @@
             </lightning:layoutItem>
         </lightning:layout>
         <!-- / NEW EXPENSE FORM -->
+        
     </div>
 </aura:component>

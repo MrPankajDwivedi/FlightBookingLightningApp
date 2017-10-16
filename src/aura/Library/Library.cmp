@@ -1,0 +1,40 @@
+<aura:component >
+	<aura:attribute name='search' type='string' />
+    <aura:attribute name='result' type='string[]' />
+    
+	Library
+    <lightning:input name="Book"  aura:id="book" value="{!v.search}" type="string" label="Book name" onchange="{!c.test}" class="slds"/>
+  <div style="position:absolute;width:100px">
+   
+    <aura:iteration aura:id="result" var="result" items="{!v.result}" indexVar="index">
+               
+                    <lightning:button aura:id="b1" class="b1"
+                                      label="b1" value="{!result}" 
+                                      onclick="{!c.clicked}">
+                        {!index+1}:{!result}
+                    </lightning:button>
+              
+            </aura:iteration>
+    
+       </div>
+   <ul class="slds-has-dividers_around-space">
+  <li class="slds-item">List item with around divider with space</li>
+  <li class="slds-item">List Item</li>
+  <li class="slds-item">List Item</li>
+</ul>
+    
+                               
+                         
+                     
+   <div style="background:red;">
+       sdhjg
+          </div>
+  
+       
+        <lightning:button class="b1"
+                                      label="b1" value="{!result}" 
+                                      onclick="{!c.clicked}">
+                        {!index+1}:{!result}
+                    </lightning:button>
+
+</aura:component>

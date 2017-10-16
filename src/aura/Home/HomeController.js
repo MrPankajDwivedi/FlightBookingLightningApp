@@ -1,29 +1,98 @@
 ({
+    
+    fromCityAutoSuggestion : function(component, event, helper) {
+        var key=component.get('v.flight.from__c');
+        var result=component.get('v.fromCities');
+        result=[];	
+        console.log(key);
+       
+        var people = ['Kanpur', 'Lucknow', 'Bangalore', 'Delhi'];
+        var reg = new RegExp(key.split('').join('\\w*').replace(/\W/, ""), 'i');
+        people.filter(function(person) {
+           if (person.match(reg)) {
+               console.log("matched: "+person);
+               result.push(person);
+           }else{
+             // console.log("Not matched: "+person); 
+           }
+       });
+        
+        component.set("v.fromCities",result);
+        if(result.length==1){
+           console.log(result[0]);        
+        }
+    },
+    from_clicked : function(component, event, helper) {
+       var name=event.getSource().get("v.value");
+
+       component.set("v.fromCities",null);
+        console.log('clicked'+ name);
+           component.set("v.flight.from__c",name);
+    },
+    
+    toCityAutoSuggestion : function(component, event, helper) {
+        var key=component.get('v.flight.to__c');
+        var result=component.get('v.toCities');
+        result=[];	
+        console.log(key);
+       
+        var people = ['Kanpur', 'Lucknow', 'Bangalore', 'Delhi'];
+        var reg = new RegExp(key.split('').join('\\w*').replace(/\W/, ""), 'i');
+        people.filter(function(person) {
+           if (person.match(reg)) {
+               console.log("matched: "+person);
+               result.push(person);
+           }else{
+             // console.log("Not matched: "+person); 
+           }
+       });
+        
+        component.set("v.toCities",result);
+        if(result.length==1){
+           console.log(result[0]);        
+        }
+    },
+    to_clicked : function(component, event, helper) {
+       var name=event.getSource().get("v.value");
+
+       component.set("v.toCities",null);
+        console.log('clicked'+ name);
+           component.set("v.flight.to__c",name);
+    },
+    
     searchFlight : function(component, event, helper) {
-        
+        var error=false;
         var flight=component.get("v.flight");
-        
+         var spinner = component.find("search_flight_spinner");
+      
+    //   console.log(event.getParams().KeyCode+"");
         //START Validation 
         var errors=  component.get("v.errors");
         errors=[];
         var from=component.find("fromCity").get("v.value");
         if(from==''){
+            console.log('From '+from);
             errors.push("Enter Source city");
+            error=true;
         }
         var from=component.find("toCity").get("v.value");
         if(from==''){
             errors.push("Enter Destination city");
+             error=true;
         }
         var from=component.find("journeyDate").get("v.value");
         if(from==''){
             errors.push("Enter Date of Travel");
-            
+             error=true;
+        }
+        if(!error){
+              $A.util.toggleClass(spinner, "slds-hide");
         }
         component.set("v.errors",errors);
           //END Validation 
         
         if(flight.from__c!=''&&flight.to__c&&flight.Journey_Date__c){
-            console.log(flight.from__c);
+          //  console.log(flight.from__c);
             var action = component.get("c.getSearchFlights");
             action.setParams({
                 "from_c":flight.from__c,
@@ -37,9 +106,9 @@
                     if(response.getReturnValue()==''){
                          errors.push("Opps..!!! No Direct Flight");
                           component.set("v.errors",errors);
-                        
+                       
                     }
-                    
+					  $A.util.toggleClass(spinner, "slds-hide");                    
                 }else{
                     component.set("v.result", "No data");
                 }
@@ -50,6 +119,7 @@
         }
        
     },
+    
     gotoURL : function(component, event, helper) {
         //  var indexvar = event.getSource().get("v.label");
         //  

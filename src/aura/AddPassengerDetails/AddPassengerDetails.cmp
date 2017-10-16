@@ -15,19 +15,25 @@
     <aura:attribute name="passenger_index_for_edit" type="integer" default="1"/>
      <aura:attribute name="passenger" type="CustomerDetail__c" 
                      default="{ 'sobjectType': 'CustomerDetail__c', 
-                              	'Email__c':'lpu.pkd@gmail.com',
-                              'Gender__c':'Male'
+                              	'Email__c':'',
+                              'Name__c':'',
+                              'DOB__c':'',
+                              'Gender__c':'',
+                              'Mobile_No__c':'',
+                              'Government_ID__c':'',
+                              'Address__c':''
                               }"/>
      <aura:attribute name="co_passenger" type="CustomerDetail__c" 
                      default="{ 'sobjectType': 'CustomerDetail__c', 
-                              	'Name__c':'Rahul',
-                              'Age__c':'42',
-                              'Gender__c':'Male'
+                              	'Name__c':'',
+                              'Age__c':'',
+                              'Gender__c':''
                               }"/>
       <aura:attribute name="passengers" type="CustomerDetail__c[]" />
      <aura:attribute name="errors" type="string[]" default=""/>
+     <aura:attribute name="errors1" type="string[]" default=""/>
     <aura:attribute name="customer_status" type="string" default="Search the customer Detail by Email"/>
- 
+  	<aura:attribute name="customerIndex" type="integer" default="0"/>
     <!--/ Attributes -->
     
 	 <!-- Flight Details -->
@@ -54,12 +60,6 @@
     <lightning:layout >
     <lightning:layoutItem size="12" class="slds-border_right slds-border_left slds-border_bottom" >
            <div id="PassengerDeatils">
-               <tr>
-                   <aura:iteration var="error" items="{!v.errors}" indexVar="index">
-                       <tr style="color:red">{!index+1} : {!error}</tr>
-                   </aura:iteration>
-                   
-               </tr>
                <table class="slds-table" >
                    
                    <th>
@@ -105,11 +105,13 @@
     
      <!-- Passenger Details -->
    <div id="Passenger1"> <!--Div id should be only id to get it by documnet.getElementByID-->
-        <lightning:layout >
+       
+       <lightning:layout >
             <lightning:layoutItem size="12" >
                  
                 <!-- BOXED AREA -->
                 <fieldset class="slds-box">
+                    <lightning:spinner aura:id="search_customer_spinner" class="slds-hide"/>
                   <legend id="newbookingform" class="slds-text-heading--small 
                                                        slds-p-vertical--medium">
                        <h1 class="slds-text-heading--label">Passenger {!v.passenger_index_for_edit} </h1>
@@ -119,36 +121,39 @@
                         <h1 style="color:Blue" id="customer_status">
                             {!v.customer_status}
                         </h1>
+                        <aura:iteration var="error" items="{!v.errors}" indexVar="index">
+                            <tr style="color:red">{!index+1} : {!error}</tr>
+                        </aura:iteration>
                     </tr>
                     <tr>
-                        <td><lightning:input label="Email" name="email" type="email" value="{!v.passenger.Email__c}"   required="true"/></td>
+                        <td><lightning:input label="Email"  name="email" type="email" value="{!v.passenger.Email__c}"   required="true"/></td>
                         <td ><br /><lightning:button variant="brand"  class="slds-button" label="Search" name="Get" onclick="{!c.getCustomerDetails}"/>
                            
                         </td>
                     </tr> 
                     <tr>
-                        <td><lightning:input label="Name" name="name" type="string" value="{!v.passenger.Name__c}"   required="true"/></td>
-                        <td><lightning:input label="Date of Birth:" name="DOB" type="date" value="{!v.passenger.DOB__c}"   required="true" /></td>
+                        <td><lightning:input label="Name" aura:id="name" name="name" type="string" value="{!v.passenger.Name__c}"   required="true"/></td>
+                        <td><lightning:input label="Date of Birth:" aura:id="dob" name="DOB" type="date" value="{!v.passenger.DOB__c}"   required="true" /></td>
                     </tr> 
                     <tr>
-                          <td> <lightning:select name="selectGender" label="Gender" value="{!v.passenger.Gender__c}" aura:id="gender__ddl" required="true">
+                          <td> <lightning:select aura:id="gender__ddl" label="Gender" name="selectGender" value="{!v.passenger.Gender__c}"  required="true">
                             <option value="--Select--">--Gender--</option>
                             <option value="Male">Male</option>
                             <option value="Female">Female</option>
                             </lightning:select>
                         </td>
-                        <td><lightning:input label="Mobile No" name="Phone" type="phone" value="{!v.passenger.Mobile_No__c}"   required="true"/></td>
+                        <td><lightning:input label="Mobile No" aura:id="mobile" name="Phone" type="phone" value="{!v.passenger.Mobile_No__c}"   required="true"/></td>
                        
                     </tr> 
                     <tr>
-                         <td><lightning:input label="Government ID:" name="Government_ID" type="string" value="{!v.passenger.Government_ID__c}"   required="true" /></td>
-                        <td>  <lightning:textarea name="Address" value="{!v.passenger.Address__c}" 
+                         <td><lightning:input label="Government ID:" aura:id="government_id" name="Government_ID" type="string" value="{!v.passenger.Government_ID__c}"   required="true" /></td>
+                        <td>  <lightning:textarea name="Address" aura:id="address" value="{!v.passenger.Address__c}" 
                                             label="Address" maxlength="300" required="true" /></td>
                       
                     </tr>
                     <tr>
                         <td>
-                               <td><lightning:button variant="brand"  class="slds-button" label="Add" name="AddPassenger"  onclick="{!c.AddPassenger}"/></td>
+                               <td><lightning:button variant="brand"  class="slds-button" label="Update" name="AddPassenger"  onclick="{!c.AddPassenger}"/></td>
                         </td>
                     </tr>
                 </table>
@@ -166,7 +171,9 @@
                        <h1 class="slds-text-heading--label">Co-Passengers </h1>
                     </legend>
                 <table class="slds-table" >
-                   
+                    <aura:iteration var="error" items="{!v.errors1}" indexVar="index">
+                            <tr style="color:red">{!index+1} : {!error}</tr>
+                        </aura:iteration>
                     <tr>
                         <td><lightning:input label="Name:" name="name" type="string" value="{!v.co_passenger.Name__c}"   required="true"/></td>
                         <td><lightning:input label="Age:" name="age" type="intenger" value="{!v.co_passenger.Age__c}"   required="true"/></td>
