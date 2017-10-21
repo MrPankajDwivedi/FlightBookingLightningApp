@@ -1,12 +1,14 @@
 ({
     
+  
+    
     fromCityAutoSuggestion : function(component, event, helper) {
         var key=component.get('v.flight.from__c');
         var result=component.get('v.fromCities');
         result=[];	
         console.log(key);
-       
-        var people = ['Kanpur', 'Lucknow', 'Bangalore', 'Delhi'];
+     
+        var people = ['Kanpur', 'Lucknow', 'Bangalore', 'Delhi','Bangalore2'];
         if(key!=null&&key.length>2){
              var reg = new RegExp(key.split('').join('\\w*').replace(/\W/, ""), 'i');
         people.filter(function(person) {

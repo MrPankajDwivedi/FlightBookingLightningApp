@@ -8,6 +8,7 @@
         // set the handler attributes based on event data
        console.log("In payment page");
            document.getElementById("successfulBookingDiv").style.display="none";
+           document.getElementById("order_status").style.color="Red";
     },
     bookFlightClient:function(component, event, helper) {
           var p=component.get("v.passengers[0]");
@@ -29,7 +30,8 @@
             if (name === "SUCCESS") {
                 console.log("Succesfully booked Booking Id:"+response.getReturnValue().Id);
                 component.set("v.orderStatus","Successfully booked(#"+response.getReturnValue().Id+")");
-             //   window.print();
+				 document.getElementById("order_status").style.color="Green";            
+                //   window.print();
                 helper.sendHelper(component,p.Email__c, 
                                   'Booking Confirmation Flight :'+f.Name+' Order ID:'+response.getReturnValue().Id, 
                                   'Greeting '+p.Name__c+",\nYour Ticket successfully booked.\n Regards \nPankaj Dwivedi\nFlight.com");

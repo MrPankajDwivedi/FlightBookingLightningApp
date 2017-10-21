@@ -18,9 +18,12 @@ global with sharing  class FlightBooking {
      @auraEnabled
     public static CustomerDetail__c getCustomerByEmail(String email)
     {
-       CustomerDetail__c cust=new CustomerDetail__c();
+        List<CustomerDetail__c> cust=new List<CustomerDetail__c>();
         cust=[select Name__c, DOB__c, Age__c, Email__c, Mobile_No__c,Government_ID__c, Address__c,Gender__c from CustomerDetail__c where Email__c=:email];
-        return cust;
+        if(cust.size()>0){
+            return cust[0];
+        }
+        return null;
     } 
     
       @auraEnabled
@@ -81,4 +84,18 @@ global with sharing  class FlightBooking {
   // Step 6: Send all emails in the master list
      Messaging.sendEmail(mails);
 }
+    
+    public static List<String> getCityList(){
+        
+       List<FlightDetail__c> flights= [Select  from__C,to__C from FlightDetail__c];
+        List<String> Cities=new List<String>();
+        for(FlightDetail__c f:flights){
+            Cities.add(''+f.from__c);
+              Cities.add(''+f.to__c);
+		}
+         Set<String> cityset = new Set<String>(Cities);
+        Cities.clear();
+        Cities=new List<String>(citySet);
+        return  Cities;
+        }
 }

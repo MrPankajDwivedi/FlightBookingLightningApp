@@ -60,28 +60,36 @@
          action.setCallback(this, function(response){
         var name = response.getState();
         if (name === "SUCCESS") {
-           
-            if(response.getReturnValue()!=''){
+           console.log(response.getReturnValue());
+            if(response.getReturnValue()!=null){
                 component.set("v.customer_status","Customer Details found Please Review them..!!!");
                 document.getElementById("customer_status").style.color="Green";
                    component.set("v.passenger",response.getReturnValue());
                    var errors=[];
                    component.set("v.errors",errors);
-            }
-           
-             $A.util.toggleClass(spinner, "slds-hide");      
-        }else if (response.getState() === "ERROR") {
-            $A.log("Errors", response.getError());
-              component.set("v.customer_status","Customer Details Not found Please Add ..!!!");
+            }else{
+                 component.set("v.customer_status","Customer Details Not found Please Add ..!!!");
                 document.getElementById("customer_status").style.color="Red";
                  var errors=[];
                    component.set("v.errors",errors);
                  var cus={'sobjectType':'CustomerDetail__c',
                 
                   'Email__c':email,
+                          'Name__c':'',
+                           'Address__c':'',
+                           'DOB__c':'',
+                           'Mobile_No__c':'',
+                           'Gender__c':'',
+                           'Government_ID__c':'',
                   
                  }
                     component.set("v.passenger",cus);
+            }
+           
+             $A.util.toggleClass(spinner, "slds-hide");      
+        }else if (response.getState() === "ERROR") {
+            $A.log("Errors", response.getError());
+             
              $A.util.toggleClass(spinner, "slds-hide");      
         }
     });
@@ -102,7 +110,7 @@
     
 },
 
-goToEdit : function(component, event, helper) {
+	goToEdit : function(component, event, helper) {
   var index=event.getSource().get("v.value");
      document.getElementById('Co_Passenger').style.display = 'none'; 
       document.getElementById('Passenger1').style.display = 'none'; 
@@ -210,6 +218,8 @@ AddPassenger: function(component, event, helper) {
                 
              
                 console.log("Age:"+response.getReturnValue().Name__c+""+response.getReturnValue().Age__C);
+                 component.set("v.customer_status","Customer Details Successfully Added..!!!");
+                document.getElementById("customer_status").style.color="Green";
                 if(response.getReturnValue()==''){
                     console.log("Error ");
                    
